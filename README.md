@@ -17,3 +17,4 @@ The basic work flow (and pertinent notes) is as follows:
 - Step3: Assemble the dataset that presents "by-wave" data, aggregating within time periods that roughly align with "waves" of the pandemic (dates & references in code)
 - Step4: Code that generates the maps presented in manuscript.
 - Step5: Code used to generate numbers presented in the Results section.
+- Step6: perform multilevel regression model & model comparisons. <-- This file is still missing from repository
