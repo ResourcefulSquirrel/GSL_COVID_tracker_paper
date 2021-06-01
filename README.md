@@ -1,7 +1,7 @@
 # GSL_COVID_tracker_paper
 Repository for code used for analysis and visualizations for GenderSci Lab's paper, titled "Addressing Vulnerability Without Biological Sex Essentialism:  Insights on Sex Disparities in COVID-19 Outcomes from the US Gender/Sex COVID-19 Data Tracker"
 
-Code was written by Katharine MN Lee and Tamara Rushovich with guidance from Luke Miratrex on MLM analyses.
+Code was written by Katharine MN Lee and Tamara Rushovich with guidance from Luke Miratrix on MLM analyses.
 
 The code assumes you are working from your own directory, with scripts in "scripts" directory and placing placing data into a "data" directory as it is generated and putting figures into their own appropriate directory locations.
 
