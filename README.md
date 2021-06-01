@@ -15,6 +15,5 @@ The basic work flow (and pertinent notes) is as follows:
   * Step1d: creates a dataset from the CDC data, which is monthly. 
 - Step2: Make Graphs of the data using weekly and cumulative and U.S. overall data.
 - Step3: Assemble the dataset that presents "by-wave" data, aggregating within time periods that roughly align with "waves" of the pandemic (dates & references in code)
-- Step4: 
-- Step5: Code that generates the maps presented in manuscript.
-- Step6: 
+- Step4: Code that generates the maps presented in manuscript.
+- Step5: Code used to generate numbers presented in the Results section.
