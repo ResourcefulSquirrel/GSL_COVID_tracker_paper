@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidycensus)
 library(lubridate)
+library(patchwork)
 library(zoo) # moving averages 
 
 # Set your working directory to "Tracker Analysis"
@@ -15,8 +16,9 @@ load("Data/WaveData/cumulative.waves.IRR.IRD.RData")
 # Load US data
 load("Data/USA data/USA_CrudeRate.RData")
 load("Data/USA data/USA_RR_RD.RData")
-load("Data/USA data/USAMortalityRate_1519.RData")
 
+
+theme_set(theme_bw())
 
 ############
 # Format data
@@ -24,19 +26,18 @@ load("Data/USA data/USAMortalityRate_1519.RData")
 #format USA data so it can be mapped with state data
 USA_formatted <- USA_CrudeRate %>% rename(date=month, 
                                           deaths_oneweek = covid_deaths_num, 
+                                          deaths = covid_deaths_cumulative,
+                                          deaths_rate_3wkrolling = Mortality_CrudeRate_USA_cumulative,
                                           deaths_oneweek_rate_3wkrolling = Mortality_CrudeRate_USA, 
                                           population = pop) %>% 
                                     mutate(sex=case_when(sex=="Male" ~ "men", sex=="Female"~"women"))
+
+USA_formatted$deaths_oneweek_rate_3wkrolling <- USA_formatted$deaths_oneweek_rate_3wkrolling/4 # To scale because months have ~4x more time than weeks
 
 USA_RR_RD_formatted <- USA_RR_RD %>% rename(date=month, 
                                             deaths_oneweek_rate_IRD = RateDiff, 
                                             deaths_oneweek_rate_IRR = RateRatio) %>% 
                                      mutate(state="United States")
-
-USAMortalityRate_1519 <- USAMortalityRate_1519 %>% 
-                         rename(date=weekdate) %>% 
-                         mutate(sex=case_when(sex=="Male" ~ "men",
-                                              sex=="Female"~"women"))
 
 ### ggplot of rates and counts by week
 
@@ -54,7 +55,8 @@ cases_weekly <- ggplot(temp,aes(x=as.Date(date),y=cases_oneweek_rate_3wkrolling,
   scale_x_date(date_breaks = "3 month", date_labels =  "%b %Y")+
   theme(axis.text.x=element_text(angle=60, hjust=1), 
         strip.text.x = element_text(size = 8, margin = margin(1,1,1,1, unit = "pt")), 
-        panel.spacing = unit(0, 'pt'))+
+        panel.spacing = unit(0, 'pt'))+ 
+  theme_bw() +
   labs(x = "Month", y = "Three Week Rolling Average Case Rate per 100,000", subtitle = "Weekly")
 
 
@@ -124,9 +126,12 @@ MortalityRate_mvgAvg_cumulative <- ggplot(temp,aes(x=as.Date(date),y=deaths_rate
   theme(axis.text.x=element_text(angle=60, hjust=1), 
         strip.text.x = element_text(size = 8, margin = margin(1,1,1,1, unit = "pt")),
         panel.spacing = unit(0, 'pt'))+
+  theme_bw() +
   labs(x = "Month", y = "Three Week Rolling Average Cumulative Mortality Rate per 100,000")
 
 mortality_combinedPlots <- MortalityRate_mvgAvg / MortalityRate_mvgAvg_cumulative +
    plot_annotation(tag_levels = 'a') + plot_layout(guides = 'collect')
 
 ggsave(mortality_combinedPlots, filename = "figures/Combined_Val_Unval_data/mortality_combinedPlot.png", width = 12, height =16)
+
+
