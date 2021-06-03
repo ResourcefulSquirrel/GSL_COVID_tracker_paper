@@ -1,14 +1,9 @@
-
 library( tidyverse )
 library( lme4 )
 library(arm)
 
+# Set your working directory to "Tracker Analysis"
 
-setwd("C:/Users/tar344/Box/") ## set working directory
-
-################### ANALYSIS WITH GSL TRACKER DATA ########################
-
-# Load wide and long data from the GSL TRACKER
 load("GenderSci_CovidMortalityProject/Tracker Analysis/Data/Combined Validated and Unvalidated Tracker Data/tracker.long.RData")
 load("GenderSci_CovidMortalityProject/Tracker Analysis/Data/Combined Validated and Unvalidated Tracker Data/tracker.wide.RData")
 
@@ -22,8 +17,7 @@ dat_Tracker<-mergeddata_long %>% dplyr::select(state,sex,date,deaths_oneweek, po
            obs=1:n())
 
 
-#### Fitting the model  ####
-
+#### Fit the model  ####
 gm_nostate <- glmer(cbind(deaths_oneweek_men, deaths_oneweek_women) ~ 1 + (1|date.cat)  +  (1|obs),
              family = binomial, data = dat_Tracker )
 summary( gm_nostate )
@@ -44,6 +38,8 @@ anova( gm_nodate,gm2  ) # tests if a radnom effect for time is needed
 ## table with three models
 library(texreg)
 htmlreg(c(gm_nodate,gm_nostate,gm2),custom.model.names=c("Model 1", "Model 2", "Model 3"),digits = 4)
+
+texreg(gm2)
 
 # These are the individual state estimated proportion male deaths.
 arm::invlogit( coef( gm2 )$state )
@@ -77,8 +73,7 @@ can_states = dplyr::mutate(can_states,
 
 can_states
 
-# These are the model-based estimates of the relative rate (death rate of men /
-# death rate of women):
+# These are the model-based estimates of the relative rate (death rate of men/death rate of women):
 summary( can_states$RR )
 
 
