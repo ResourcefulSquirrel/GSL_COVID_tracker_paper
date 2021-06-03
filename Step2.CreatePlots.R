@@ -17,7 +17,7 @@ load("Data/WaveData/cumulative.waves.IRR.IRD.RData")
 load("Data/USA data/USA_CrudeRate.RData")
 load("Data/USA data/USA_RR_RD.RData")
 
-
+#set theme so it applies to all ggplot graphs below
 theme_set(theme_bw())
 
 ############
@@ -52,11 +52,10 @@ temp$state <- fct_relevel(as.factor(temp$state), "United States")
 #cases weekly
 cases_weekly <- ggplot(temp,aes(x=as.Date(date),y=cases_oneweek_rate_3wkrolling,group=sex,color=sex))+
   geom_line()+facet_wrap(~state)+ 
-  scale_x_date(date_breaks = "3 month", date_labels =  "%b %Y")+
+  scale_x_date(date_breaks = "3 month", date_labels =  "%b %Y") +
   theme(axis.text.x=element_text(angle=60, hjust=1), 
         strip.text.x = element_text(size = 8, margin = margin(1,1,1,1, unit = "pt")), 
-        panel.spacing = unit(0, 'pt'))+ 
-  theme_bw() +
+        panel.spacing = unit(0, 'pt'))+
   labs(x = "Month", y = "Three Week Rolling Average Case Rate per 100,000", subtitle = "Weekly")
 
 
@@ -126,7 +125,6 @@ MortalityRate_mvgAvg_cumulative <- ggplot(temp,aes(x=as.Date(date),y=deaths_rate
   theme(axis.text.x=element_text(angle=60, hjust=1), 
         strip.text.x = element_text(size = 8, margin = margin(1,1,1,1, unit = "pt")),
         panel.spacing = unit(0, 'pt'))+
-  theme_bw() +
   labs(x = "Month", y = "Three Week Rolling Average Cumulative Mortality Rate per 100,000")
 
 mortality_combinedPlots <- MortalityRate_mvgAvg / MortalityRate_mvgAvg_cumulative +
